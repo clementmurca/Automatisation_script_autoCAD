@@ -93,7 +93,7 @@ class AutoCADScriptGenerator:
                 
                 # Write commands to file
                 script_file.write(commands)
-                script_file.write(f"\n; --- End of {cber_ref} ---\n")
+                script_file.write("\n\n")
         
         print(f"✅ Script generated: {output_file}")
         return output_file
