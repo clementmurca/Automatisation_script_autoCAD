@@ -1,0 +1,15 @@
+-la
+U
+*
+
+._ucs
+_R
+{CBER_REF}
+-attdia
+0
+._insert
+C:/CBER_TOOLS/LIB/TAG_FACTORY.dwg
+0,0
+1
+0
+{CBER_DATE}{CBER_NR}
