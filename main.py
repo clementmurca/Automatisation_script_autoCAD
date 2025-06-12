@@ -1,7 +1,5 @@
 import csv
 import winreg
-import os
-from pathlib import Path
 
 class AutoCADScriptGenerator:
     def __init__(self, txt_file, separator=';'):
