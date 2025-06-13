@@ -16,7 +16,6 @@ class AutoCADScriptGenerator:
                 self.csv_data = list(reader)
                 print(f"✅ TXT file loaded: {len(self.csv_data)} rows")
                 
-                # Debug: show first few rows
                 for i, row in enumerate(self.csv_data[:3]):
                     print(f"Row {i+1}: {row}")
                     
@@ -68,18 +67,28 @@ class AutoCADScriptGenerator:
         # Get system variables from registry
         system_variables = self.get_system_variables()
         
+        # Convert CBER_NR to integer for incrementation
+        try:
+            base_cber_nr = int(system_variables['CBER_NR'])
+        except ValueError:
+            print(f"⚠️  CBER_NR is not a valid number: {system_variables['CBER_NR']}")
+            base_cber_nr = 0
+        
         # Generate script for each row in TXT file
         with open(output_file, 'w', encoding='utf-8') as script_file:
             for i, csv_row in enumerate(self.csv_data, 1):
                 print(f"Processing row {i}/{len(self.csv_data)}")
                 
-                # Extract only field 5 (CBER_REF) from the row
+                # Extract only field 5 (CBER_REF)
                 if len(csv_row) >= 5:
-                    cber_ref = self.clean_csv_value(csv_row[4])  # Field 5 (index 4)
+                    cber_ref = self.clean_csv_value(csv_row[4])
                     print(f"  CBER_REF: {cber_ref}")
                 else:
                     print(f"⚠️  Row {i} has insufficient columns: {len(csv_row)}")
                     cber_ref = "[MISSING_REF]"
+                    
+                current_cber_nr = base_cber_nr + (i - 1)
+                print(f"  CBER_NR: {current_cber_nr}")
                 
                 # Copy template for this row
                 commands = template
@@ -87,7 +96,7 @@ class AutoCADScriptGenerator:
                 # Replace variables in template
                 commands = commands.replace('{CBER_REF}', cber_ref)
                 commands = commands.replace('{CBER_DATE}', system_variables['CBER_DATE'])
-                commands = commands.replace('{CBER_NR}', system_variables['CBER_NR'])
+                commands = commands.replace('{CBER_NR}', str(current_cber_nr))
                 
                 # Write commands to file
                 script_file.write(commands)
@@ -121,10 +130,8 @@ def generate_autocad_script(txt_file, template_file, output_file):
 
 # Usage
 if __name__ == "__main__":
-    # Configuration
     txt_file = "Extract_data_csv/extract.txt"
     template_file = "Template/gabarit_autoCAD.txt"
     output_file = "Output_folder/script_autocad.scr"
     
-    # Generate script
     generate_autocad_script(txt_file, template_file, output_file)
