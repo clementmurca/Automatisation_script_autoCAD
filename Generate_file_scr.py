@@ -73,7 +73,7 @@ class AutoCADScriptGenerator:
         except ValueError:
             print(f"⚠️  CBER_NR is not a valid number: {system_variables['CBER_NR']}")
             base_cber_nr = 0
-        
+
         # Generate script for each row in TXT file
         with open(output_file, 'w', encoding='utf-8') as script_file:
             for i, csv_row in enumerate(self.csv_data, 1):
@@ -86,7 +86,7 @@ class AutoCADScriptGenerator:
                 else:
                     print(f"⚠️  Row {i} has insufficient columns: {len(csv_row)}")
                     cber_ref = "[MISSING_REF]"
-                    
+                     
                 current_cber_nr = base_cber_nr + (i - 1)
                 print(f"  CBER_NR: {current_cber_nr}")
                 
@@ -129,8 +129,8 @@ def generate_autocad_script(txt_file, template_file, output_file):
         raise
 
 # Usage
-if __name__ == "__main__":
-    txt_file = "Extract_data_csv/extract.txt"
+if __name__ == "__main__":  
+    txt_file = "Extract_data_csv/Extract.txt"
     template_file = "Template/gabarit_autoCAD.txt"
     output_file = "Output_folder/script_autocad.scr"
     
